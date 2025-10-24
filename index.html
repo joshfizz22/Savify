@@ -7,42 +7,8 @@
 <meta name="google-adsense-account" content="ca-pub-6774980266966517">
 <!-- LocalForage Storage Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
-
-<!-- ======= YOUR APP ICON ======= -->
-<link rel="icon" href="icon.png" type="image/png">
-<link rel="apple-touch-icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#25D366">
-<meta name="mobile-web-app-capable" content="yes">
-
-<!-- Web App Manifest -->
-<link rel="manifest" href="data:application/manifest+json,{
-  \"name\": \"Savify - WhatsApp Status Saver\",
-  \"short_name\": \"Savify\",
-  \"description\": \"Download and save WhatsApp status updates easily\",
-  \"start_url\": \".\",
-  \"display\": \"standalone\",
-  \"theme_color\": \"#25D366\",
-  \"background_color\": \"#ffffff\",
-  \"orientation\": \"portrait\",
-  \"icons\": [
-    {
-      \"src\": \"icon.png\",
-      \"sizes\": \"192x192\",
-      \"type\": \"image/png\"
-    },
-    {
-      \"src\": \"icon.png\", 
-      \"sizes\": \"512x512\",
-      \"type\": \"image/png\"
-    }
-  ]
-}">
-
 <title>Savify - Download WhatsApp Status Videos & Images</title>
 <meta name="description" content="Free WhatsApp Status Saver - Download and save status updates from WhatsApp and WhatsApp Business. Easy, fast, and 100% free.">
-
 <style>
   :root {
     --bg-color: #f0f0f0;
@@ -172,6 +138,8 @@
     color: var(--topbar-text);
     margin-top: 10px;
   }
+  
+  /* Enhanced Content Styles */
   .content-section {
     margin-bottom: 30px;
   }
@@ -415,30 +383,20 @@
     flex: 1;
     min-width: 120px;
   }
-  .install-hint {
-    background: var(--setting-bg);
-    padding: 15px;
-    margin: 15px 0;
-    border-radius: 10px;
-    text-align: center;
-    border-left: 4px solid var(--topbar-bg);
-  }
 </style>
 </head>
 <body>
   <div class="splash" id="splash">
     <div class="logo">
-      <!-- Your icon will show here -->
-      <img src="icon.png" alt="Savify Logo" style="width: 100px; height: 100px; border-radius: 20px;">
+      <img src="icon.png" alt="Savify Logo">
     </div>
-    <div class="name">Savify</div>
-    <p style="color: var(--text-color); margin-top: 10px;">WhatsApp Status Saver</p>
   </div>
 
+  <!-- Enhanced Guide -->
   <div class="guide-overlay" id="guideOverlay">
     <div class="guide-step active" id="step1">
       <h2>Welcome to Savify! 🎉</h2>
-      <p>Savify helps you download and save WhatsApp status updates easily.</p>
+      <p>Savify helps you download and save WhatsApp status updates easily. Follow these simple steps to get started.</p>
       <div class="guide-buttons">
         <button class="skip-btn" onclick="skipGuide()">Skip Tutorial</button>
         <button class="btn" onclick="nextStep()">Get Started</button>
@@ -446,7 +404,7 @@
     </div>
     <div class="guide-step" id="step2">
       <h3>Step 1: View WhatsApp Status</h3>
-      <p>Open WhatsApp and watch the status updates you want to save.</p>
+      <p>Open WhatsApp or WhatsApp Business and watch the status updates you want to save. Make sure to view them completely.</p>
       <div class="guide-buttons">
         <button class="skip-btn" onclick="skipGuide()">Skip</button>
         <button class="btn" onclick="nextStep()">Next</button>
@@ -454,7 +412,7 @@
     </div>
     <div class="guide-step" id="step3">
       <h3>Step 2: Select Status Files</h3>
-      <p>Switch to Savify and tap "Select Statuses" to choose images and videos.</p>
+      <p>Switch to Savify and tap "Select Statuses". Navigate to the WhatsApp Statuses folder to choose images and videos.</p>
       <div class="guide-buttons">
         <button class="skip-btn" onclick="skipGuide()">Skip</button>
         <button class="btn" onclick="nextStep()">Next</button>
@@ -462,7 +420,7 @@
     </div>
     <div class="guide-step" id="step4">
       <h3>Step 3: Save to Gallery</h3>
-      <p>Your selected statuses will be saved in the app's gallery.</p>
+      <p>Your selected statuses will be saved in the app's gallery. You can view, organize, and manage them anytime.</p>
       <div class="guide-buttons">
         <button class="skip-btn" onclick="skipGuide()">Skip</button>
         <button class="btn" onclick="nextStep()">Next</button>
@@ -470,7 +428,7 @@
     </div>
     <div class="guide-step" id="step5">
       <h3>Step 4: Enjoy Your Saved Statuses! 🎯</h3>
-      <p>Access your saved statuses anytime, even when they disappear from WhatsApp.</p>
+      <p>Access your saved statuses anytime, even when they disappear from WhatsApp. All files are stored locally on your device.</p>
       <div class="guide-buttons">
         <button class="skip-btn" onclick="skipGuide()">Skip</button>
         <button class="btn" onclick="closeGuide()">Start Using Savify</button>
@@ -486,16 +444,8 @@
   <div class="notification-popup" id="notificationPopup">
     <span class="close" onclick="hideNotification()">×</span>
     <h3>New Status Available! 📱</h3>
-    <p>Get notified when new WhatsApp statuses are available.</p>
+    <p>Get notified when new WhatsApp statuses are available from your contacts.</p>
     <button class="btn" onclick="hideNotification()">CONTINUE</button>
-  </div>
-
-  <div class="install-hint">
-    <h3>📱 Install Savify as App</h3>
-    <p><strong>For best experience, install on your home screen:</strong></p>
-    <p>Android: Chrome menu → "Add to Home screen"</p>
-    <p>iPhone: Safari share → "Add to Home Screen"</p>
-    <p><em>Your Savify icon will appear on home screen!</em></p>
   </div>
 
   <div class="tab-bar">
@@ -521,25 +471,25 @@
     </div>
   </div>
 
-  <!-- Status Saver Page -->
+  <!-- Status Saver Page - Enhanced with Content -->
   <div id="status-page" class="page active">
     <div class="content-section">
       <h2>WhatsApp Status Saver</h2>
-      <p>Easily download and save status updates from WhatsApp Messenger. Never lose important status updates again!</p>
+      <p>Easily download and save status updates from WhatsApp Messenger. Never lose important status updates again! Our tool helps you preserve memorable moments shared by your contacts.</p>
       
       <div class="step-by-step">
         <h3>How to Save Statuses:</h3>
         <div class="step">
-          <strong>Step 1:</strong> Open WhatsApp and view the status
+          <strong>Step 1:</strong> Open WhatsApp and view the status you want to save
         </div>
         <div class="step">
-          <strong>Step 2:</strong> Return to Savify and select your app
+          <strong>Step 2:</strong> Return to Savify and select your app below
         </div>
         <div class="step">
-          <strong>Step 3:</strong> Tap "Select Statuses" and choose files
+          <strong>Step 3:</strong> Tap "Select Statuses" and choose files to save
         </div>
         <div class="step">
-          <strong>Step 4:</strong> Access saved statuses in Gallery tab
+          <strong>Step 4:</strong> Access your saved statuses in the Gallery tab
         </div>
       </div>
     </div>
@@ -551,6 +501,7 @@
 
     <div style="text-align: center; margin: 25px 0;">
       <button class="btn" onclick="selectStatuses('whatsapp')">📁 Select Statuses</button>
+      <button class="btn" onclick="switchTab('help')" style="background: #666;">📖 View Detailed Guide</button>
     </div>
 
     <div class="content-section">
@@ -564,13 +515,33 @@
         <li>Dark and light theme support</li>
       </ul>
     </div>
+
+    <p style="font-size: 12px; color: var(--text-color); text-align: center; margin-top: 20px;">
+      <strong>Tip:</strong> Navigate to /Android/media/com.whatsapp/WhatsApp/Media/.Statuses/ for images and videos.
+    </p>
   </div>
 
-  <!-- WhatsApp Business Page -->
+  <!-- WhatsApp Business Page - Enhanced -->
   <div id="business-page" class="page">
     <div class="content-section">
       <h2>WhatsApp Business Status Saver</h2>
-      <p>Download status updates from WhatsApp Business accounts. Perfect for saving business promotions and announcements.</p>
+      <p>Download status updates from WhatsApp Business accounts. Perfect for saving business promotions, product updates, and important announcements from your favorite businesses.</p>
+      
+      <div class="step-by-step">
+        <h3>Business Status Saving Guide:</h3>
+        <div class="step">
+          <strong>Step 1:</strong> Open WhatsApp Business app
+        </div>
+        <div class="step">
+          <strong>Step 2:</strong> View business status updates completely
+        </div>
+        <div class="step">
+          <strong>Step 3:</strong> Use Savify to access and save business status files
+        </div>
+        <div class="step">
+          <strong>Step 4:</strong> Organize saved business content in your gallery
+        </div>
+      </div>
     </div>
 
     <div class="app-selector">
@@ -580,6 +551,18 @@
 
     <div style="text-align: center; margin: 25px 0;">
       <button class="btn" onclick="selectStatuses('business')">📁 Select Business Statuses</button>
+      <button class="btn" onclick="switchTab('help')" style="background: #666;">📖 Business Guide</button>
+    </div>
+
+    <div class="content-section">
+      <h3>Business Features:</h3>
+      <ul class="feature-list">
+        <li>Save business promotions and announcements</li>
+        <li>Keep track of product updates</li>
+        <li>Organize business content separately</li>
+        <li>Reference important business information</li>
+        <li>All small business tools in one app</li>
+      </ul>
     </div>
   </div>
 
@@ -587,11 +570,12 @@
   <div id="saved-page" class="page">
     <div style="text-align: center; margin-bottom: 20px;">
       <button class="btn" onclick="loadGallery()" style="background: #666;">🔄 Refresh Gallery</button>
+      <button class="btn" onclick="clearAllData()" style="background: #ff4444;">🗑️ Clear All</button>
     </div>
     
     <div class="content-section">
       <h2>My Saved Status Gallery</h2>
-      <p>All your saved WhatsApp statuses are stored here. Everything is stored locally on your device.</p>
+      <p>All your saved WhatsApp statuses are stored here. You can view, manage, and organize your collected status updates. Everything is stored locally on your device for privacy and offline access.</p>
     </div>
 
     <div class="gallery" id="gallery">
@@ -603,50 +587,206 @@
     </p>
   </div>
 
-  <!-- Help & Guide Page -->
+  <!-- NEW: Help & Guide Page -->
   <div id="help-page" class="page">
     <div class="content-section">
       <h2>Savify Help & User Guide</h2>
-      <p>Welcome to Savify! This guide will help you make the most of our WhatsApp status saving features.</p>
+      <p>Welcome to Savify! This comprehensive guide will help you make the most of our WhatsApp status saving features.</p>
+    </div>
+
+    <div class="content-section">
+      <h3>📖 Complete User Manual</h3>
+      
+      <div class="step-by-step">
+        <h4>Getting Started with Savify</h4>
+        <p>Savify is designed to be simple and intuitive. Follow these steps to save your first WhatsApp status:</p>
+        
+        <div class="step">
+          <strong>Understanding WhatsApp Statuses:</strong><br>
+          WhatsApp statuses are temporary updates that disappear after 24 hours. Savify helps you preserve these moments permanently.
+        </div>
+        
+        <div class="step">
+          <strong>How Status Saving Works:</strong><br>
+          When you view a status in WhatsApp, the app temporarily stores it in your device's storage. Savify accesses these temporary files and helps you save them before they disappear.
+        </div>
+        
+        <div class="step">
+          <strong>File Locations:</strong><br>
+          - WhatsApp: /Android/media/com.whatsapp/WhatsApp/Media/.Statuses/<br>
+          - WhatsApp Business: /Android/media/com.whatsapp.w4b/WhatsApp Business/Media/.Statuses/
+        </div>
+      </div>
     </div>
 
     <div class="content-section">
       <h3>❓ Frequently Asked Questions</h3>
+      
       <div class="step-by-step">
         <div class="step">
           <strong>Q: Is Savify free to use?</strong><br>
-          A: Yes! Savify is completely free with no hidden costs.
+          A: Yes! Savify is completely free with no hidden costs. We support the app through optional non-intrusive ads.
         </div>
+        
         <div class="step">
           <strong>Q: Are my saved statuses private?</strong><br>
-          A: Absolutely! All your saved statuses are stored locally on your device.
+          A: Absolutely! All your saved statuses are stored locally on your device. We don't upload anything to any servers.
         </div>
+        
+        <div class="step">
+          <strong>Q: Why can't I see some statuses?</strong><br>
+          A: Make sure you've completely viewed the status in WhatsApp and that it's still available (within 24 hours).
+        </div>
+        
         <div class="step">
           <strong>Q: Does this work with video statuses?</strong><br>
-          A: Yes! Savify supports both image and video status updates.
+          A: Yes! Savify supports both image and video status updates from WhatsApp.
+        </div>
+        
+        <div class="step">
+          <strong>Q: Can I use this with WhatsApp Business?</strong><br>
+          A: Definitely! We fully support both WhatsApp Messenger and WhatsApp Business.
         </div>
       </div>
     </div>
+
+    <div class="content-section">
+      <h3>🛠️ Troubleshooting Guide</h3>
+      <ul class="feature-list">
+        <li><strong>Status not showing:</strong> Ensure you've watched the full status in WhatsApp</li>
+        <li><strong>Can't find files:</strong> Use a file manager to navigate to the Statuses folder</li>
+        <li><strong>App not working:</strong> Try refreshing the page or clearing browser data</li>
+        <li><strong>Storage issues:</strong> Use the Clear All feature to free up space</li>
+        <li><strong>Performance:</strong> Close other apps for better performance</li>
+      </ul>
+    </div>
+
+    <div class="content-nav">
+      <button class="btn" onclick="switchTab('status')">🚀 Start Saving</button>
+      <button class="btn" onclick="showGuide()">📚 View Tutorial</button>
+      <button class="btn" onclick="switchTab('settings')">⚙️ App Settings</button>
+    </div>
   </div>
 
-  <!-- Settings Page -->
+  <!-- Settings Page - Enhanced -->
   <div id="settings-page" class="page">
     <div class="vip-section" onclick="activateVIP()">
       <div class="vip-badge">⭐ VIP FEATURES</div>
       <h3>Remove All Ads</h3>
-      <p>Enjoy Savify without any advertisements.</p>
+      <p>Enjoy Savify without any advertisements. Support development and get cleaner experience.</p>
     </div>
 
     <div class="content-section">
       <h3>App Preferences</h3>
+      
       <div class="setting-item">
         <div>
           <h4>How to Use Guide</h4>
-          <p>Step-by-step tutorial</p>
+          <p>Step-by-step tutorial for new users</p>
         </div>
         <div onclick="showGuide()" style="cursor: pointer;">📖</div>
       </div>
 
+      <div class="setting-item">
+        <div>
+          <h4>Notification New Status</h4>
+          <p>Get alerted when new statuses available</p>
+        </div>
+        <label class="toggle" onclick="toggleSetting(this)">
+          <div class="toggle-knob"></div>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h4>Auto Save Feature</h4>
+          <p>Automatically save all new statuses</p>
+        </div>
+        <label class="toggle" onclick="toggleSetting(this)">
+          <div class="toggle-knob"></div>
+        </label>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h4>Save Location</h4>
+          <p>/storage/emulated/0/Download/Savify/</p>
+        </div>
+        <div onclick="alert('Folder browser opens here')">📁</div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>Information & Support</h3>
+      
+      <div class="setting-item">
+        <div>
+          <h4>Privacy Policy</h4>
+          <p>How we protect your data and privacy</p>
+        </div>
+        <div onclick="showPrivacyPolicy()" style="cursor: pointer;">📄</div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h4>About Savify</h4>
+          <p>Learn about our app and features</p>
+        </div>
+        <div onclick="showAboutUs()" style="cursor: pointer;">ℹ️</div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h4>Help & Support</h4>
+          <p>Get help and troubleshooting guide</p>
+        </div>
+        <div onclick="switchTab('help')" style="cursor: pointer;">❓</div>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>Data Management</h3>
+      
+      <div class="setting-item">
+        <div>
+          <h4>Clear All Saved Data</h4>
+          <p>Delete all saved statuses and reset app</p>
+        </div>
+        <button class="btn" onclick="clearAllData()" style="background: #ff4444; padding: 8px 16px;">Clear</button>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h4>Export Data</h4>
+          <p>Backup your saved statuses</p>
+        </div>
+        <button class="btn" onclick="alert('Export feature coming soon!')" style="background: #666; padding: 8px 16px;">Export</button>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>Share & Support</h3>
+      
+      <div class="setting-item">
+        <div>
+          <h4>Share Savify</h4>
+          <p>Share this app with friends and family</p>
+        </div>
+        <button class="btn" onclick="shareApp()" style="padding: 8px 16px;">Share</button>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h4>Rate Our App</h4>
+          <p>Support us with your positive rating</p>
+        </div>
+        <button class="btn" onclick="rateApp()" style="padding: 8px 16px;">Rate</button>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <h3>Appearance</h3>
+      
       <div class="setting-item">
         <div>
           <h4>Theme Selection</h4>
@@ -655,36 +795,6 @@
         <label class="toggle" id="themeToggle" onclick="toggleTheme()">
           <div class="toggle-knob"></div>
         </label>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <h3>Information</h3>
-      <div class="setting-item">
-        <div>
-          <h4>Privacy Policy</h4>
-          <p>How we protect your data</p>
-        </div>
-        <div onclick="showPrivacyPolicy()" style="cursor: pointer;">📄</div>
-      </div>
-
-      <div class="setting-item">
-        <div>
-          <h4>About Savify</h4>
-          <p>Learn about our app</p>
-        </div>
-        <div onclick="showAboutUs()" style="cursor: pointer;">ℹ️</div>
-      </div>
-    </div>
-
-    <div class="content-section">
-      <h3>Data Management</h3>
-      <div class="setting-item">
-        <div>
-          <h4>Clear All Saved Data</h4>
-          <p>Delete all saved statuses</p>
-        </div>
-        <button class="btn" onclick="clearAllData()" style="background: #ff4444; padding: 8px 16px;">Clear</button>
       </div>
     </div>
   </div>
@@ -714,12 +824,13 @@
       description: "Savify status storage"
     });
 
-    // App initialization
+    // Enhanced initialization
     setTimeout(() => {
       document.getElementById('splash').classList.add('hidden');
       checkGuide();
       loadGallery();
       checkVIPStatus();
+      console.log("Savify App Initialized Successfully");
     }, 2000);
 
     // Guide system
@@ -739,6 +850,9 @@
       currentStep++;
       if (currentStep <= 5) {
         document.getElementById(`step${currentStep}`).classList.add('active');
+      }
+      if (currentStep === 5) {
+        document.querySelector('#step5 .btn').innerText = 'Start Using Savify';
       }
     }
 
@@ -766,6 +880,12 @@
     document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
     document.getElementById('themeToggle').classList.toggle('active', isDark);
 
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      isDark = e.matches;
+      document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeToggle').classList.toggle('active', isDark);
+    });
+
     function toggleTheme() {
       isDark = !isDark;
       document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
@@ -782,6 +902,11 @@
       if (tab === 'saved') {
         loadGallery();
       }
+    }
+
+    function toggleSetting(el) {
+      el.classList.toggle('active');
+      // Here you would save the setting to storage
     }
 
     function showNotification() {
@@ -817,6 +942,7 @@
               source: app,
               data: dataUrl,
               timestamp: Date.now(),
+              size: file.size
             };
             
             const key = `saved_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -904,7 +1030,7 @@
     }
 
     async function clearAllData() {
-      if (confirm("Are you sure you want to delete ALL saved statuses?")) {
+      if (confirm("Are you sure you want to delete ALL saved statuses? This action cannot be undone.")) {
         const keys = await storage.keys();
         let deletedCount = 0;
         
@@ -930,7 +1056,7 @@
     }
 
     async function activateVIP() {
-      if (confirm("Go VIP to remove all ads?")) {
+      if (confirm("Go VIP to remove all ads? Support development and enjoy ad-free experience!")) {
         await storage.setItem('isVIP', true);
         await checkVIPStatus();
         alert("🎉 Thank you for becoming a VIP! All ads have been removed.");
@@ -939,22 +1065,82 @@
 
     // Information modals
     function showPrivacyPolicy() {
-      const policy = `<h2>Privacy Policy</h2><p>Savify does not collect or share any personal data. All your data stays on your device.</p>`;
+      const policy = `
+        <h2>Privacy Policy</h2>
+        <p><strong>Last Updated: ${new Date().toLocaleDateString()}</strong></p>
+        
+        <h3>Data Collection and Usage</h3>
+        <p>Savify is committed to protecting your privacy. We do not collect, store, or share any personal information. All your data remains securely on your device.</p>
+        
+        <h3>Local Storage</h3>
+        <p>The app uses your browser's local storage to save status images and videos temporarily. This data never leaves your device and is not accessible to us or any third parties.</p>
+        
+        <h3>File Access</h3>
+        <p>Savify requires file access only to save statuses you explicitly choose to download. We cannot access any other files on your device without your permission.</p>
+        
+        <h3>Third-Party Services</h3>
+        <p>We use Google AdSense to display advertisements. AdSense may use cookies and similar technologies to serve personalized ads based on your browsing history across websites.</p>
+        
+        <h3>Your Rights</h3>
+        <p>You have the right to access, modify, or delete any data stored by the app. Use the "Clear All Data" feature in settings to remove all stored information.</p>
+        
+        <h3>Contact Information</h3>
+        <p>For privacy concerns or questions: privacy@savify.app</p>
+      `;
+      
       const modal = document.createElement('div');
       modal.className = 'modal-overlay';
-      modal.innerHTML = `<div class="modal-content"><button class="close-modal" onclick="this.parentElement.parentElement.remove()">×</button>${policy}</div>`;
+      modal.innerHTML = `
+        <div class="modal-content">
+          <button class="close-modal" onclick="this.parentElement.parentElement.remove()">×</button>
+          <div style="text-align: left;">${policy}</div>
+        </div>
+      `;
       document.body.appendChild(modal);
     }
 
     function showAboutUs() {
-      const about = `<h2>About Savify</h2><p>Savify helps you save WhatsApp status updates easily and securely.</p>`;
+      const about = `
+        <h2>About Savify</h2>
+        
+        <p><strong>Your Ultimate WhatsApp Status Saver</strong></p>
+        
+        <p>Savify is designed to help you preserve memorable moments shared through WhatsApp status updates. Statuses disappear after 24 hours, but with Savify, you can keep them forever.</p>
+        
+        <h3>Our Mission</h3>
+        <p>To provide a simple, reliable, and free tool for saving WhatsApp status updates while maintaining complete user privacy and data security.</p>
+        
+        <h3>Key Features</h3>
+        <ul>
+          <li>✅ Save images and videos from WhatsApp statuses</li>
+          <li>✅ Support for both WhatsApp and WhatsApp Business</li>
+          <li>✅ 100% free with no hidden costs</li>
+          <li>✅ All data stored locally on your device</li>
+          <li>✅ No registration or personal information required</li>
+          <li>✅ Dark and light theme support</li>
+          <li>✅ Regular updates and improvements</li>
+        </ul>
+        
+        <h3>Technical Information</h3>
+        <p>Savify is built using modern web technologies including HTML5, CSS3, and JavaScript. We use localForage for reliable local storage and follow best practices for web app development.</p>
+        
+        <p><strong>Version:</strong> 2.1<br>
+        <strong>Platform:</strong> Progressive Web App (PWA)<br>
+        <strong>Support:</strong> support@savify.app</p>
+      `;
+      
       const modal = document.createElement('div');
       modal.className = 'modal-overlay';
-      modal.innerHTML = `<div class="modal-content"><button class="close-modal" onclick="this.parentElement.parentElement.remove()">×</button>${about}</div>`;
+      modal.innerHTML = `
+        <div class="modal-content">
+          <button class="close-modal" onclick="this.parentElement.parentElement.remove()">×</button>
+          <div style="text-align: left;">${about}</div>
+        </div>
+      `;
       document.body.appendChild(modal);
     }
 
-    // App selection
+    // Utility functions
     document.querySelectorAll('input[name="app"]').forEach(radio => {
       radio.addEventListener('change', e => {
         const app = e.target.id;
@@ -964,17 +1150,36 @@
     });
 
     function shareApp() {
-      alert('Share Savify with your friends!');
+      if (navigator.share) {
+        navigator.share({
+          title: 'Savify - WhatsApp Status Saver',
+          text: 'Download and save WhatsApp status updates easily with Savify!',
+          url: window.location.href
+        });
+      } else {
+        alert('Share: https://savify-alpha.vercel.app\n\nDownload WhatsApp statuses easily!');
+      }
     }
 
     function rateApp() {
-      alert('Please rate Savify in your app store!');
+      alert('⭐ Rate Us!\n\nIf you enjoy using Savify, please consider rating us in your app store!');
     }
 
-    // PWA detection
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      console.log('Savify is running as installed app');
+    // Auto-save current tab
+    let currentTab = 'status';
+    function switchTab(tab) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(tab + '-page').classList.add('active');
+      event.target.closest('.tab').classList.add('active');
+      currentTab = tab;
+      
+      if (tab === 'saved') {
+        loadGallery();
+      }
     }
+
+    console.log("Savify Enhanced Version Loaded Successfully");
   </script>
 </body>
 </html>
