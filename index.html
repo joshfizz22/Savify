@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <!-- Google AdSense Verification -->
 <meta name="google-adsense-account" content="ca-pub-6774980266966517">
+<!-- LocalForage Storage Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 <title>Savify</title>
 <style>
   :root {
@@ -302,6 +304,41 @@
     border-top: 1px solid #eee;
     margin-top: 20px;
   }
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+  }
+  .modal-content {
+    background: var(--setting-bg);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 90%;
+    max-height: 80%;
+    overflow-y: auto;
+    position: relative;
+  }
+  .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-color);
+  }
+  .loading {
+    text-align: center;
+    padding: 20px;
+  }
 </style>
 </head>
 <body>
@@ -416,7 +453,9 @@
     </div>
   </div>
   <div id="saved-page" class="page">
-    <div class="gallery" id="gallery"></div>
+    <div class="gallery" id="gallery">
+      <div class="loading" id="galleryLoading">Loading your saved statuses...</div>
+    </div>
     <p id="no-items" style="display: none; text-align: center;">No saved items yet.</p>
   </div>
   <div id="settings-page" class="page">
@@ -459,10 +498,24 @@
     </div>
     <div class="setting-item">
       <div>
-        <h3>Privacy policy</h3>
-        <p>Our Terms and conditions</p>
+        <h3>Privacy Policy</h3>
+        <p>How we handle your data and privacy</p>
       </div>
       <div onclick="showPrivacyPolicy()">→</div>
+    </div>
+    <div class="setting-item">
+      <div>
+        <h3>About Us</h3>
+        <p>Learn more about Savify app</p>
+      </div>
+      <div onclick="showAboutUs()">→</div>
+    </div>
+    <div class="setting-item">
+      <div>
+        <h3>Clear All Data</h3>
+        <p>Delete all saved statuses and reset app</p>
+      </div>
+      <button class="btn" onclick="clearAllData()" style="background: #ff4444;">Clear</button>
     </div>
     <div class="setting-item">
       <div>
@@ -508,6 +561,12 @@
   </div>
 
   <script>
+    // Configure localForage
+    const storage = localforage.createInstance({
+      name: "SavifyApp",
+      description: "Savify status storage"
+    });
+
     // Splash screen fade
     setTimeout(() => {
       document.getElementById('splash').classList.add('hidden');
@@ -518,11 +577,13 @@
 
     // Guide page logic
     function checkGuide() {
-      if (!localStorage.getItem('guideShown')) {
-        document.getElementById('guideOverlay').style.display = 'flex';
-      } else {
-        document.getElementById('status-page').classList.add('active');
-      }
+      storage.getItem('guideShown').then(shown => {
+        if (!shown) {
+          document.getElementById('guideOverlay').style.display = 'flex';
+        } else {
+          document.getElementById('status-page').classList.add('active');
+        }
+      });
     }
 
     let currentStep = 1;
@@ -536,13 +597,13 @@
     }
 
     function skipGuide() {
-      localStorage.setItem('guideShown', 'true');
+      storage.setItem('guideShown', true);
       document.getElementById('guideOverlay').style.display = 'none';
       document.getElementById('status-page').classList.add('active');
     }
 
     function closeGuide() {
-      localStorage.setItem('guideShown', 'true');
+      storage.setItem('guideShown', true);
       document.getElementById('guideOverlay').style.display = 'none';
       document.getElementById('status-page').classList.add('active');
     }
@@ -591,84 +652,183 @@
     }
 
     function openWhatsApp(app) {
-      const url = app === 'whatsapp' ? 'whatsapp://' : 'whatsapp-business://';
-      window.open(url, '_blank');
+      if (app === 'whatsapp') {
+        alert('Please open WhatsApp manually to view statuses, then return to Savify to save them.');
+      } else {
+        alert('Please open WhatsApp Business manually to view statuses, then return to Savify to save them.');
+      }
     }
 
-    function selectStatuses(app) {
+    async function selectStatuses(app) {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = 'image/*,video/*';
       input.multiple = true;
-      input.onchange = e => {
+      input.onchange = async e => {
         const files = Array.from(e.target.files);
-        files.forEach(file => {
+        for (const file of files) {
           const reader = new FileReader();
-          reader.onload = function(event) {
+          reader.onload = async function(event) {
             const item = {
               name: file.name,
               type: file.type,
               source: app,
-              data: event.target.result
+              data: event.target.result,
+              timestamp: Date.now()
             };
-            localStorage.setItem(`saved_${Date.now()}`, JSON.stringify(item));
-            loadGallery();
+            await storage.setItem(`saved_${item.timestamp}`, item);
           };
           reader.readAsDataURL(file);
-        });
+        }
+        await loadGallery();
         switchTab('saved');
       };
       input.click();
     }
 
-    function loadGallery() {
+    async function loadGallery() {
       const gallery = document.getElementById('gallery');
       const noItems = document.getElementById('no-items');
+      const loading = document.getElementById('galleryLoading');
+      
       gallery.innerHTML = '';
-      let hasItems = false;
-      for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.startsWith('saved_')) {
-          hasItems = true;
-          const item = JSON.parse(localStorage.getItem(key));
-          const div = document.createElement('div');
-          div.className = 'gallery-item';
-          div.innerHTML = `<img src="${item.data}" alt="${item.name}"><button class="delete-btn" onclick="deleteItem('${key}')">×</button>`;
-          gallery.appendChild(div);
+      loading.style.display = 'block';
+      noItems.style.display = 'none';
+
+      try {
+        const keys = await storage.keys();
+        let hasItems = false;
+        
+        for (const key of keys) {
+          if (key.startsWith('saved_')) {
+            hasItems = true;
+            const item = await storage.getItem(key);
+            const div = document.createElement('div');
+            div.className = 'gallery-item';
+            div.innerHTML = `<img src="${item.data}" alt="${item.name}"><button class="delete-btn" onclick="deleteItem('${key}')">×</button>`;
+            gallery.appendChild(div);
+          }
         }
+        
+        loading.style.display = 'none';
+        noItems.style.display = hasItems ? 'none' : 'block';
+      } catch (error) {
+        console.error('Error loading gallery:', error);
+        loading.style.display = 'none';
+        noItems.style.display = 'block';
       }
-      noItems.style.display = hasItems ? 'none' : 'block';
     }
 
-    function deleteItem(key) {
-      localStorage.removeItem(key);
-      loadGallery();
+    async function deleteItem(key) {
+      await storage.removeItem(key);
+      await loadGallery();
     }
 
-    function checkVIPStatus() {
-      const isVIP = localStorage.getItem('isVIP') === 'true';
+    async function checkVIPStatus() {
+      const isVIP = await storage.getItem('isVIP');
       const adContainer = document.getElementById('ad-container');
       if(adContainer) {
         adContainer.style.display = isVIP ? 'none' : 'block';
       }
     }
 
-    function activateVIP() {
+    async function activateVIP() {
       if(confirm("Go VIP to remove all ads? (This is a demo. In a real app, a payment screen would appear here.)")) {
-        localStorage.setItem('isVIP', 'true');
-        checkVIPStatus();
+        await storage.setItem('isVIP', true);
+        await checkVIPStatus();
         alert("Thank you for becoming a VIP! Ads have been removed.");
+      }
+    }
+
+    async function clearAllData() {
+      if(confirm("Are you sure you want to delete ALL saved statuses? This cannot be undone.")) {
+        const keys = await storage.keys();
+        for (const key of keys) {
+          if (key.startsWith('saved_')) {
+            await storage.removeItem(key);
+          }
+        }
+        await loadGallery();
+        alert("All data has been cleared!");
       }
     }
 
     function showPrivacyPolicy() {
       const policy = `
-        <h3>Privacy Policy</h3>
-        <p>This app uses Google AdSense to display ads. AdSense may use cookies to serve personalized ads.</p>
-        <p>We do not collect or share personal information. All saved statuses are stored locally on your device.</p>
-        <p>For questions, contact us at youremail@domain.com</p>
+        <h2>Privacy Policy</h2>
+        
+        <h3>Data Collection</h3>
+        <p>Savify does not collect, store, or share any personal information. All data remains on your device using secure local storage.</p>
+        
+        <h3>Local Storage</h3>
+        <p>We use localForage library to securely store your saved statuses locally on your device. No data is sent to any server.</p>
+        
+        <h3>Third-Party Services</h3>
+        <p>We use Google AdSense to display ads. AdSense may use cookies to serve personalized ads based on your browsing history.</p>
+        
+        <h3>Permissions</h3>
+        <p>Savify requires file access only to save statuses you choose to download. We cannot access any other files on your device.</p>
+        
+        <h3>Contact</h3>
+        <p>For privacy concerns: contact@savify.app</p>
+        
+        <p><em>Last updated: ${new Date().toLocaleDateString()}</em></p>
       `;
-      alert(policy);
+      
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <button class="close-modal" onclick="this.parentElement.parentElement.remove()">×</button>
+          <div style="text-align: left; max-width: 500px;">
+            ${policy}
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    function showAboutUs() {
+      const about = `
+        <h2>About Savify</h2>
+        
+        <p><strong>Save WhatsApp Statuses Easily</strong></p>
+        
+        <p>Savify helps you download and save status updates from WhatsApp and WhatsApp Business with just a few taps.</p>
+        
+        <h3>Features:</h3>
+        <ul style="text-align: left;">
+          <li>Save images and videos from statuses</li>
+          <li>Support for WhatsApp & WhatsApp Business</li>
+          <li>Organize saved statuses in gallery</li>
+          <li>Dark/Light theme support</li>
+          <li>Secure local storage with localForage</li>
+          <li>100% free with optional ad removal</li>
+        </ul>
+        
+        <h3>How It Works:</h3>
+        <p>1. View status in WhatsApp<br>
+           2. Use Savify to access status files<br>
+           3. Save to your gallery<br>
+           4. Enjoy offline access!</p>
+        
+        <p><strong>No data collection • No server storage • Everything stays on your device</strong></p>
+        
+        <p>Version 2.0<br>
+        Built with ❤️ for WhatsApp users</p>
+      `;
+      
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <button class="close-modal" onclick="this.parentElement.parentElement.remove()">×</button>
+          <div style="text-align: center; max-width: 500px;">
+            ${about}
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
     }
 
     document.querySelectorAll('input[name="app"]').forEach(radio => {
