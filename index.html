@@ -453,6 +453,9 @@
     </div>
   </div>
   <div id="saved-page" class="page">
+    <div style="text-align: center; margin-bottom: 10px;">
+      <button class="btn" onclick="loadGallery()" style="background: #666;">Refresh Gallery</button>
+    </div>
     <div class="gallery" id="gallery">
       <div class="loading" id="galleryLoading">Loading your saved statuses...</div>
     </div>
@@ -561,9 +564,11 @@
   </div>
 
   <script>
-    // Configure localForage
+    // Configure localForage for reliable storage
     const storage = localforage.createInstance({
       name: "SavifyApp",
+      version: 1.0,
+      storeName: "savify_storage",
       description: "Savify status storage"
     });
 
@@ -637,6 +642,11 @@
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.getElementById(tab + '-page').classList.add('active');
       event.target.closest('.tab').classList.add('active');
+      
+      // RELOAD GALLERY WHEN SWITCHING TO SAVED TAB
+      if (tab === 'saved') {
+        loadGallery();
+      }
     }
 
     function toggleSetting(el) {
@@ -659,6 +669,7 @@
       }
     }
 
+    // FIXED: This function now properly saves images to storage
     async function selectStatuses(app) {
       const input = document.createElement('input');
       input.type = 'file';
@@ -666,62 +677,119 @@
       input.multiple = true;
       input.onchange = async e => {
         const files = Array.from(e.target.files);
+        let savedCount = 0;
+        
+        // Process each file and wait for it to complete
         for (const file of files) {
-          const reader = new FileReader();
-          reader.onload = async function(event) {
+          try {
+            const dataUrl = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = e => resolve(e.target.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(file);
+            });
+            
             const item = {
               name: file.name,
               type: file.type,
               source: app,
-              data: event.target.result,
-              timestamp: Date.now()
+              data: dataUrl,
+              timestamp: Date.now(),
+              size: file.size
             };
-            await storage.setItem(`saved_${item.timestamp}`, item);
-          };
-          reader.readAsDataURL(file);
+            
+            // Create unique key and save to storage
+            const key = `saved_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            await storage.setItem(key, item);
+            savedCount++;
+            console.log('✅ Saved:', file.name, 'as', key);
+            
+          } catch (error) {
+            console.error('❌ Failed to save:', file.name, error);
+          }
         }
-        await loadGallery();
-        switchTab('saved');
+        
+        // Show success message and refresh gallery
+        if (savedCount > 0) {
+          alert(`Successfully saved ${savedCount} item(s)!`);
+          await loadGallery();
+          switchTab('saved');
+        } else {
+          alert('Failed to save any items. Please try again.');
+        }
       };
       input.click();
     }
 
+    // FIXED: This function properly loads images from storage
     async function loadGallery() {
       const gallery = document.getElementById('gallery');
       const noItems = document.getElementById('no-items');
       const loading = document.getElementById('galleryLoading');
       
       gallery.innerHTML = '';
-      loading.style.display = 'block';
-      noItems.style.display = 'none';
+      if (loading) loading.style.display = 'block';
+      if (noItems) noItems.style.display = 'none';
 
       try {
         const keys = await storage.keys();
+        const savedKeys = keys.filter(key => key.startsWith('saved_'));
+        
+        console.log('🔍 Loading gallery, found items:', savedKeys.length);
+        
+        if (savedKeys.length === 0) {
+          if (loading) loading.style.display = 'none';
+          if (noItems) noItems.style.display = 'block';
+          return;
+        }
+
         let hasItems = false;
         
-        for (const key of keys) {
-          if (key.startsWith('saved_')) {
-            hasItems = true;
+        for (const key of savedKeys) {
+          try {
             const item = await storage.getItem(key);
-            const div = document.createElement('div');
-            div.className = 'gallery-item';
-            div.innerHTML = `<img src="${item.data}" alt="${item.name}"><button class="delete-btn" onclick="deleteItem('${key}')">×</button>`;
-            gallery.appendChild(div);
+            if (item && item.data) {
+              hasItems = true;
+              
+              const div = document.createElement('div');
+              div.className = 'gallery-item';
+              
+              const img = document.createElement('img');
+              img.src = item.data;
+              img.alt = item.name;
+              img.style.cssText = 'width: 100%; height: 100px; object-fit: cover;';
+              
+              const deleteBtn = document.createElement('button');
+              deleteBtn.className = 'delete-btn';
+              deleteBtn.innerHTML = '×';
+              deleteBtn.onclick = () => deleteItem(key);
+              
+              div.appendChild(img);
+              div.appendChild(deleteBtn);
+              gallery.appendChild(div);
+            }
+          } catch (error) {
+            console.error('Error loading item:', key, error);
           }
         }
         
-        loading.style.display = 'none';
-        noItems.style.display = hasItems ? 'none' : 'block';
+        if (loading) loading.style.display = 'none';
+        if (noItems) noItems.style.display = hasItems ? 'none' : 'block';
+        
+        console.log('✅ Gallery loaded successfully. Items:', hasItems);
+        
       } catch (error) {
-        console.error('Error loading gallery:', error);
-        loading.style.display = 'none';
-        noItems.style.display = 'block';
+        console.error('❌ Error loading gallery:', error);
+        if (loading) loading.style.display = 'none';
+        if (noItems) noItems.style.display = 'block';
       }
     }
 
     async function deleteItem(key) {
-      await storage.removeItem(key);
-      await loadGallery();
+      if (confirm('Are you sure you want to delete this item?')) {
+        await storage.removeItem(key);
+        await loadGallery();
+      }
     }
 
     async function checkVIPStatus() {
@@ -743,13 +811,17 @@
     async function clearAllData() {
       if(confirm("Are you sure you want to delete ALL saved statuses? This cannot be undone.")) {
         const keys = await storage.keys();
+        let deletedCount = 0;
+        
         for (const key of keys) {
           if (key.startsWith('saved_')) {
             await storage.removeItem(key);
+            deletedCount++;
           }
         }
+        
         await loadGallery();
-        alert("All data has been cleared!");
+        alert(`Deleted ${deletedCount} items!`);
       }
     }
 
@@ -850,6 +922,17 @@
     function rateApp() {
       alert('Rate dialog opens here!');
     }
+
+    // Debug function to check storage
+    async function debugStorage() {
+      const keys = await storage.keys();
+      const savedItems = keys.filter(key => key.startsWith('saved_'));
+      console.log('📊 STORAGE STATUS:', savedItems.length, 'saved items');
+      return savedItems.length;
+    }
+
+    // Auto-check storage on load
+    setTimeout(debugStorage, 3000);
   </script>
 </body>
 </html>
