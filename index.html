@@ -4,8 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Savify</title>
-<!-- AD CODE: Replace with your actual Google AdSense code -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_CLIENT_ID"></script>
+<!-- YOUR ADSENSE CODE -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6774980266966517"
+     crossorigin="anonymous"></script>
 <style>
   :root {
     --bg-color: #f0f0f0;
@@ -462,7 +463,7 @@
         <h3>Privacy policy</h3>
         <p>Our Terms and conditions</p>
       </div>
-      <div onclick="alert('Privacy policy opens here!')">→</div>
+      <div onclick="showPrivacyPolicy()">→</div>
     </div>
     <div class="setting-item">
       <div>
@@ -492,10 +493,10 @@
   <!-- Ad Container -->
   <div id="ad-container">
     <p style="margin: 0; font-size: 12px; color: var(--text-color);">Advertisement</p>
-    <!-- AD CODE: Replace with your actual Google AdSense code -->
+    <!-- YOUR ADSENSE AD UNIT -->
     <ins class="adsbygoogle"
         style="display:block"
-        data-ad-client="ca-pub-YOUR_CLIENT_ID"
+        data-ad-client="ca-pub-6774980266966517"
         data-ad-slot="YOUR_AD_SLOT_ID"
         data-ad-format="auto"
         data-full-width-responsive="true"></ins>
@@ -656,6 +657,16 @@
         checkVIPStatus();
         alert("Thank you for becoming a VIP! Ads have been removed.");
       }
+    }
+
+    function showPrivacyPolicy() {
+      const policy = `
+        <h3>Privacy Policy</h3>
+        <p>This app uses Google AdSense to display ads. AdSense may use cookies to serve personalized ads.</p>
+        <p>We do not collect or share personal information. All saved statuses are stored locally on your device.</p>
+        <p>For questions, contact us at youremail@domain.com</p>
+      `;
+      alert(policy);
     }
 
     document.querySelectorAll('input[name="app"]').forEach(radio => {
